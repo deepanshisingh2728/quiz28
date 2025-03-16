@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f2f2f2;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: linear-gradient(135deg, #8EC5FC, #E0C3FC);
+        }
+        .quiz-container {
+            background-color: white;
+            background-image: linear-gradient(135deg, #B7F8DB, #50A7C2);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            font-weight: 600;
+        }
+        .question {
+            margin: 20px 0;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+        }
+        .option-label {
+            margin-left: 10px;
+            font-weight: 400;
+            font-size: 16px;
+        }
+        .btn {
+            background-color: #ff6f61;
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background-color: #e55e53;
+        }
+        .scoreboard {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .correct {
+            color: green;
+        }
+        .incorrect {
+            color: red;
+        }
+        .reset-btn {
+            background-color: #ffcc00;
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .reset-btn:hover {
+            background-color: #fbb13c;
+        }
+        .feedback-text {
+            font-size: 14px;
+            font-weight: 400;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Quick Quiz</h1>
+        
+        <div class="question">
+            <p>1. What is the capital of France?</p>
+            <div class="options">
+                <label><input type="radio" name="q1" value="a"> <span class="option-label">Berlin</span> <span class="feedback-text"></span></label>
+                <label><input type="radio" name="q1" value="b"> <span class="option-label">Madrid</span> <span class="feedback-text"></span></label>
+                <label><input type="radio" name="q1" value="c"> <span class="option-label">Paris</span> <span class="feedback-text"></span></label>
+                <label><input type="radio" name="q1" value="d"> <span class="option-label">Rome</span> <span class="feedback-text"></span></label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>2. What is 2 + 2?</p>
+            <div class="options">
+                <label><input type="radio" name="q2" value="a"> <span class="option-label">3</span> <span class="feedback-text"></span></label>
+                <label><input type="radio" name="q2" value="b"> <span class="option-label">4</span> <span class="feedback-text"></span></label>
+                <label><input type="radio" name="q2" value="c"> <span class="option-label">5</span> <span class="feedback-text"></span></label>
+                <label><input type="radio" name="q2" value="d"> <span class="option-label">6</span> <span class="feedback-text"></span></label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>3. What is the color of the sky on a clear day?</p>
+            <div class="options">
+                <label><input type="radio" name="q3" value="a"> <span class="option-label">Green</span> <span class="feedback-text"></span></label>
+                <label><input type="radio" name="q3" value="b"> <span class="option-label">Blue</span> <span class="feedback-text"></span></label>
+                <label><input type="radio" name="q3" value="c"> <span class="option-label">Red</span> <span class="feedback-text"></span></label>
+                <label><input type="radio" name="q3" value="d"> <span class="option-label">Yellow</span> <span class="feedback-text"></span></label>
+            </div>
+        </div>
+
+        <div class="scoreboard"></div>
+        
+        <button id="submitBtn" class="btn">Submit</button>
+        <button id="resetBtn" class="reset-btn">Reset</button>
+    </div>
+
+    <script>
+        // Correct answers for each question
+        const answers = {
+            q1: 'c', // Paris
+            q2: 'b', // 4
+            q3: 'b'  // Blue
+        };
+
+        // Get DOM elements
+        const submitBtn = document.getElementById('submitBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const scoreboard = document.querySelector('.scoreboard');
+
+        // Function to check answers and display feedback
+        function checkAnswers() {
+            let score = 0;
+            const questions = ['q1', 'q2', 'q3'];
+            
+            // Loop through each question
+            questions.forEach(q => {
+                const selectedOption = document.querySelector(`input[name="${q}"]:checked`);
+                if (selectedOption) {
+                    const userAnswer = selectedOption.value;
+                    const correctAnswer = answers[q];
+                    
+                    // Highlight answers and provide feedback
+                    const optionLabels = document.querySelectorAll(`input[name="${q}"]`);
+                    optionLabels.forEach(option => {
+                        const label = option.nextElementSibling;
+                        const feedbackText = option.nextElementSibling.nextElementSibling;
+
+                        if (option.value === correctAnswer) {
+                            label.classList.add('correct');
+                            feedbackText.textContent = 'Correct!';
+                            feedbackText.classList.add('correct');
+                        } else if (option.value === userAnswer && userAnswer !== correctAnswer) {
+                            label.classList.add('incorrect');
+                            feedbackText.textContent = 'Incorrect!';
+                            feedbackText.classList.add('incorrect');
+                        } else {
+                            feedbackText.textContent = ''; // Clear feedback for unselected answers
+                        }
+                    });
+
+                    if (userAnswer === correctAnswer) {
+                        score++;
+                    }
+                }
+            });
+
+            // Display score
+            scoreboard.textContent = `You scored ${score} out of 3`;
+        }
+
+        // Function to reset the quiz
+        function resetQuiz() {
+            const radios = document.querySelectorAll('input[type="radio"]');
+            radios.forEach(radio => radio.checked = false);
+            
+            const optionLabels = document.querySelectorAll('.option-label');
+            const feedbackTexts = document.querySelectorAll('.feedback-text');
+            optionLabels.forEach(label => {
+                label.classList.remove('correct', 'incorrect');
+            });
+            feedbackTexts.forEach(feedback => {
+                feedback.classList.remove('correct', 'incorrect');
+                feedback.textContent = '';
+            });
+            
+            scoreboard.textContent = '';
+        }
+
+        // Add event listeners to buttons
+        submitBtn.addEventListener('click', checkAnswers);
+        resetBtn.addEventListener('click', resetQuiz);
+    </script>
+</body>
+</html>
